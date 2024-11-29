@@ -9,7 +9,18 @@ typedef struct node_t {
 } node_t;
 
 node_t * search(node_t * node, int toFind);
-void destroyTree(node_t * node);
+
+void destroyTree(node_t * node) {
+	if (node->left) {
+		destroyTree(node->left);
+	}
+	if (node->right) {
+		destroyTree(node->right);
+	}
+	printf("freeing node with value: %i\n", node->value);
+	free(node);
+}
+
 void delete(node_t node, int elem);
 
 void insert(node_t * node, int elem) {
@@ -56,7 +67,7 @@ node_t * createTree(int firstElem) {
 
 #include <stdbool.h>
 
-int test_insert_create() {
+bool test_insert_create() {
 	node_t * node = createTree(3);
 	insert(node, 2);
 	insert(node, 1);
@@ -71,9 +82,23 @@ int test_insert_create() {
 	return valid;
 }
 
+bool test_destroy_tree() {
+	node_t * node = createTree(99);
+	insert(node, 102);
+	insert(node, 5);
+	insert(node, -99);
+	insert(node, 8);
+	insert(node, 14);
+
+	destroyTree(node);
+	
+	return true;
+}
+
 int test_suite() {
 	bool valid = true;
 	if (!test_insert_create()) {valid = false; printf("test_insert_create() failed\n");} else {printf("test_insert_create() passed\n");}
+	if (!test_destroy_tree()) {valid = false; printf("test_destroy_tree() failed\n");} else {printf("test_destroy_tree() passed\n");}
 	return valid;
 }
 	

@@ -8,7 +8,22 @@ typedef struct node_t {
 	struct node_t * right;
 } node_t;
 
-node_t * search(node_t * node, int toFind);
+node_t * search(node_t * node, int toFind) {
+	if (node->left) {
+		node_t* found_node = search(node->left, toFind);
+		if (found_node) { return found_node; }
+	}
+	if (node->right) {
+		node_t* found_node = search(node->right, toFind);
+		if (found_node) { return found_node; }
+
+	}
+	if (node->value == toFind) {
+		return node;
+	} else {
+		return NULL;
+	}
+}
 
 void destroyTree(node_t * node) {
 	if (node->left) {
@@ -95,10 +110,26 @@ bool test_destroy_tree() {
 	return true;
 }
 
+bool test_search_node_exists() {
+	node_t * node = createTree(100);
+	insert(node, 50);
+	insert(node, 25);
+	insert(node, 75);
+	insert(node, 150);
+	insert(node, 125);
+	insert(node, 175);
+
+	bool valid = true;
+	if(!search(node, 25)) { valid = false; }
+	if(!search(node, 150)) {valid = false; }
+	return valid;
+}
+
 int test_suite() {
 	bool valid = true;
 	if (!test_insert_create()) {valid = false; printf("test_insert_create() failed\n");} else {printf("test_insert_create() passed\n");}
 	if (!test_destroy_tree()) {valid = false; printf("test_destroy_tree() failed\n");} else {printf("test_destroy_tree() passed\n");}
+	if (!test_search_node_exists()) {valid = false; printf("test_search_node_exists() failed\n");} else {printf("test_search_node_exists() passed\n");}
 	return valid;
 }
 	

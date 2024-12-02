@@ -6,6 +6,7 @@ typedef struct node_t {
 	int value;
 	struct node_t * left;
 	struct node_t * right;
+	struct node_t ** ptr_to_this;
 } node_t;
 
 node_t * search(node_t * node, int toFind) {
@@ -35,19 +36,48 @@ void destroyTree(node_t * node) {
 	free(node);
 }
 
-void delete(node_t node, int elem) {
-	// find node and its parent
-	// if has only one child, move it up and return
-	// if has two children find the smallest value in the left subtree and move it 
-	// if not left or right:
-	// 	de-allocate current
-	// else if not left and right:
-	// 	make parent point to child
-	// 	de-allocate current
-	// else:
-	// 	find largest in left by going left then right until leaf
-	// 	point deleted's parent at it
-	// 	unpoint smallests parent from it
+void delete(node_t * node, int elem) {
+	printf("deleting %d\n", elem);
+
+	node_t* to_delete = search(node, elem);
+	if (!to_delete) { return; }
+
+	printf("found node\n");
+
+	// if node is leaf, remove pointer in parent and free
+	if (!to_delete->left && !to_delete->right) {
+		*to_delete->ptr_to_this = NULL;
+		free(to_delete);
+		printf("deleted leaf\n");
+	}
+
+	else if (to_delete->left && to_delete->right) {
+		// get max in left subtree
+		node_t* max_on_left = to_delete->left;
+		while (max_on_left->right) {
+			max_on_left = max_on_left->right;
+		}
+		
+		to_delete->value = max_on_left->value;
+
+		// deal with left max child
+		if (max_on_left->left) {
+			*max_on_left->ptr_to_this = max_on_left->left;
+			max_on_left->left->ptr_to_this = max_on_left->ptr_to_this;
+		}
+
+		free(max_on_left);
+	}
+
+	else if (to_delete->left && !to_delete->right) {
+		*to_delete->ptr_to_this = to_delete->left;
+		to_delete->left->ptr_to_this = to_delete->ptr_to_this;
+	} 
+
+	else if (!to_delete->left && to_delete->right) {
+		*to_delete->ptr_to_this = to_delete->right;
+		to_delete->right->ptr_to_this = to_delete->ptr_to_this;
+	}
 }
 
 void insert(node_t * node, int elem) {
@@ -64,6 +94,7 @@ void insert(node_t * node, int elem) {
 		else if (elem < current->value) {
 			if (current->left == NULL) {
 				current->left = new;
+				new->ptr_to_this = &current->left;
 				return;
 			} else {
 				current = current->left;
@@ -73,6 +104,7 @@ void insert(node_t * node, int elem) {
 		else {
 			if (current->right == NULL) {
 				current->right = new;
+				new->ptr_to_this = &current->right;
 				return;
 			} else {
 				current = current->right;
@@ -132,11 +164,24 @@ bool test_search_node_exists() {
 	return valid;
 }
 
+bool test_delete_leaf() {
+	node_t * root = createTree(100);
+	insert(root, 50);
+	printf("deleting in test\n");
+	delete(root, 50);
+
+	bool valid = true;
+	if (search(root, 50)) { valid = false; }
+	return valid;
+}
+
 int test_suite() {
 	bool valid = true;
 	if (!test_insert_create()) {valid = false; printf("test_insert_create() failed\n");} else {printf("test_insert_create() passed\n");}
 	if (!test_destroy_tree()) {valid = false; printf("test_destroy_tree() failed\n");} else {printf("test_destroy_tree() passed\n");}
 	if (!test_search_node_exists()) {valid = false; printf("test_search_node_exists() failed\n");} else {printf("test_search_node_exists() passed\n");}
+	printf("about to test delete leaf\n");
+	if (!test_delete_leaf()) { valid = false; printf("test_delete_leaf() failed\n"); } else { printf("test_delete_leaf() passed\n"); }
 	return valid;
 }
 	

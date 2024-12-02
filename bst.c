@@ -32,7 +32,6 @@ void destroyTree(node_t * node) {
 	if (node->right) {
 		destroyTree(node->right);
 	}
-	printf("freeing node with value: %i\n", node->value);
 	free(node);
 }
 
@@ -46,29 +45,24 @@ void insert(node_t * node, int elem) {
 
 	while (1) {
 		if (current->value == elem) {
-			printf("current value = elem\n");
 			return;
 		}
 
 		else if (elem < current->value) {
 			if (current->left == NULL) {
 				current->left = new;
-				printf("inserting at left\n");
 				return;
 			} else {
 				current = current->left;
-				printf("navigating left\n");
 			}
 		} 
 
 		else {
 			if (current->right == NULL) {
-				printf("inserting at right\n");
 				current->right = new;
 				return;
 			} else {
 				current = current->right;
-				printf("navigating right\n");
 			}
 		}
 	}

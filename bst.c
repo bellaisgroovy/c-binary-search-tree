@@ -175,14 +175,24 @@ bool test_delete_leaf() {
 	return valid;
 }
 
-int test_suite() {
-	bool valid = true;
-	if (!test_insert_create()) {valid = false; printf("test_insert_create() failed\n");} else {printf("test_insert_create() passed\n");}
-	if (!test_destroy_tree()) {valid = false; printf("test_destroy_tree() failed\n");} else {printf("test_destroy_tree() passed\n");}
-	if (!test_search_node_exists()) {valid = false; printf("test_search_node_exists() failed\n");} else {printf("test_search_node_exists() passed\n");}
-	printf("about to test delete leaf\n");
-	if (!test_delete_leaf()) { valid = false; printf("test_delete_leaf() failed\n"); } else { printf("test_delete_leaf() passed\n"); }
-	return valid;
+bool run_test(bool (*script)(), char name[]) {
+	if ((*script)()) {
+		printf("passed %s\n", name);
+		return true;
+	} 
+
+	else {
+		printf("FAILED %s\n", name);
+		return false;
+	}
+}
+
+void test_suite() {
+	run_test(&test_insert_create, "test_insert_create()");
+	run_test(&test_destroy_tree, "test_destroy_tree()");
+	run_test(&test_search_node_exists, "test_search_node_exists()");
+	run_test(&test_delete_leaf, "test_delete_leaf()");
+	return;
 }
 	
 int main() {

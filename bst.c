@@ -35,7 +35,20 @@ void destroyTree(node_t * node) {
 	free(node);
 }
 
-void delete(node_t node, int elem);
+void delete(node_t node, int elem) {
+	// find node and its parent
+	// if has only one child, move it up and return
+	// if has two children find the smallest value in the left subtree and move it 
+	// if not left or right:
+	// 	de-allocate current
+	// else if not left and right:
+	// 	make parent point to child
+	// 	de-allocate current
+	// else:
+	// 	find largest in left by going left then right until leaf
+	// 	point deleted's parent at it
+	// 	unpoint smallests parent from it
+}
 
 void insert(node_t * node, int elem) {
 	node_t * current = node;

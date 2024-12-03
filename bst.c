@@ -70,11 +70,13 @@ void delete(node_t * node, int elem) {
 	else if (to_delete->left && !to_delete->right) {
 		*to_delete->ptr_to_this = to_delete->left;
 		to_delete->left->ptr_to_this = to_delete->ptr_to_this;
+		free(to_delete);
 	} 
 
 	else if (!to_delete->left && to_delete->right) {
 		*to_delete->ptr_to_this = to_delete->right;
 		to_delete->right->ptr_to_this = to_delete->ptr_to_this;
+		free(to_delete);
 	}
 }
 

@@ -189,6 +189,19 @@ bool test_delete_two_children() {
 	return valid;
 }
 
+bool test_delete_one_child() {
+	node_t * root = createTree(1000);
+	insert(root, 500);
+	insert(root, 250);
+	insert(root, 125);
+	delete(root, 250);
+
+	bool valid = true;
+	if (root->left->value != 500 && root->left->left != 125) {valid = false; }
+	printf("root: %d, left: %d, leftleft: %d", root->value, root->left->value, root->left->left->value);
+	return valid;
+}
+
 bool run_test(bool (*script)(), char name[]) {
 	if ((*script)()) {
 		printf("passed %s\n", name);
@@ -207,6 +220,7 @@ void test_suite() {
 	run_test(&test_search_node_exists, "test_search_node_exists()");
 	run_test(&test_delete_leaf, "test_delete_leaf()");
 	run_test(&test_delete_two_children, "test_delete_two_children()");
+	run_test(&test_delete_one_child, "test_delete_one_child()");
 	return;
 }
 	

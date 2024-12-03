@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
 
 //contract
 typedef struct node_t {
@@ -202,6 +202,11 @@ bool test_delete_one_child() {
 	return valid;
 }
 
+bool test_delete_root() {
+	node_t * root = createTree(1000);
+	return true;
+}
+
 bool run_test(bool (*script)(), char name[]) {
 	if ((*script)()) {
 		printf("passed %s\n", name);
@@ -221,6 +226,7 @@ void test_suite() {
 	run_test(&test_delete_leaf, "test_delete_leaf()");
 	run_test(&test_delete_two_children, "test_delete_two_children()");
 	run_test(&test_delete_one_child, "test_delete_one_child()");
+	run_test(&test_delete_root, "test_delete_root()");
 	return;
 }
 	

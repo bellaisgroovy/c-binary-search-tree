@@ -10,6 +10,9 @@ typedef struct node_t {
 } node_t;
 
 node_t * search(node_t * node, int toFind) {
+	if (node->value == toFind) {
+		return node;
+	}
 	if (node->left) {
 		node_t* found_node = search(node->left, toFind);
 		if (found_node) { return found_node; }
@@ -17,13 +20,8 @@ node_t * search(node_t * node, int toFind) {
 	if (node->right) {
 		node_t* found_node = search(node->right, toFind);
 		if (found_node) { return found_node; }
-
 	}
-	if (node->value == toFind) {
-		return node;
-	} else {
-		return NULL;
-	}
+	return NULL;
 }
 
 void destroyTree(node_t * node) {
@@ -197,8 +195,8 @@ bool test_delete_one_child() {
 	delete(root, 250);
 
 	bool valid = true;
-	if (root->left->value != 500 && root->left->left != 125) {valid = false; }
-	printf("root: %d, left: %d, leftleft: %d", root->value, root->left->value, root->left->left->value);
+	if (root->left->value != 500 && root->left->left->value != 125) { valid = false; }
+	printf("root: %d, left: %d, leftleft: %d\n", root->value, root->left->value, root->left->left->value);
 	return valid;
 }
 

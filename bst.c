@@ -6,9 +6,16 @@ typedef struct node_t {
 	int value;
 	struct node_t * left;
 	struct node_t * right;
-	struct node_t ** ptr_to_this;
+	struct node_t ** ptr_to_this; // pointer to pointer to this in parent
 } node_t;
 
+node_t * search(node_t * node, int toFind);
+node_t * createTree(int firstElem);
+void destroyTree(node_t * node);
+void insert(node_t * node, int elem);
+void delete(node_t * node, int elem);
+
+//implementation
 node_t * search(node_t * node, int toFind) {
 	if (node->value == toFind) {
 		return node;
@@ -49,6 +56,7 @@ void delete(node_t * node, int elem) {
 		printf("deleted leaf\n");
 	}
 
+	// if node has two children, swap value with max in subtree then delete where old max in subtree is
 	else if (to_delete->left && to_delete->right) {
 		// get max in left subtree
 		node_t* max_on_left = to_delete->left;
@@ -66,13 +74,13 @@ void delete(node_t * node, int elem) {
 
 		free(max_on_left);
 	}
-
+	
+	// if has one child, connect parent and child of node, then free node
 	else if (to_delete->left && !to_delete->right) {
 		*to_delete->ptr_to_this = to_delete->left;
 		to_delete->left->ptr_to_this = to_delete->ptr_to_this;
 		free(to_delete);
 	} 
-
 	else if (!to_delete->left && to_delete->right) {
 		*to_delete->ptr_to_this = to_delete->right;
 		to_delete->right->ptr_to_this = to_delete->ptr_to_this;

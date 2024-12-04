@@ -20,11 +20,11 @@ node_t * search(node_t * node, int toFind) {
 	if (node->value == toFind) {
 		return node;
 	}
-	if (node->left) {
+	if (node->left && toFind < node->value) {
 		node_t* found_node = search(node->left, toFind);
 		if (found_node) { return found_node; }
 	}
-	if (node->right) {
+	if (node->right && toFind > node->value) {
 		node_t* found_node = search(node->right, toFind);
 		if (found_node) { return found_node; }
 	}

@@ -70,6 +70,8 @@ void delete(node_t * node, int elem) {
 		if (max_on_left->left) {
 			*max_on_left->ptr_to_this = max_on_left->left;
 			max_on_left->left->ptr_to_this = max_on_left->ptr_to_this;
+		} else {
+			*max_on_left->ptr_to_this = NULL;
 		}
 
 		free(max_on_left);

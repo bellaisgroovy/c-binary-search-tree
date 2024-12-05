@@ -17,18 +17,14 @@ void delete(node_t * node, int elem);
 
 //implementation
 node_t * search(node_t * node, int toFind) {
-	if (node->value == toFind) {
+	if (node == NULL || node->value == toFind) {
 		return node;
-	}
-	if (node->left && toFind < node->value) {
-		node_t* found_node = search(node->left, toFind);
-		if (found_node) { return found_node; }
-	}
-	if (node->right && toFind > node->value) {
-		node_t* found_node = search(node->right, toFind);
-		if (found_node) { return found_node; }
-	}
-	return NULL;
+	} if (toFind > node->value) {
+		return search(node->right, toFind);
+	} 
+
+	// if (toFind < node->value)
+	return search(node->left, toFind);
 }
 
 void destroyTree(node_t * node) {

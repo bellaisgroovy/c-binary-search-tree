@@ -113,6 +113,8 @@ node_t * createTree(int firstElem) {
 	printf("creating tree with first elem %d\n", firstElem);
 	node_t * node = (node_t*) malloc(sizeof(node_t));
 	node->value = firstElem;
+	node->left = NULL;
+	node->right = NULL;
 	return node;
 }
 

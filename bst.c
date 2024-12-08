@@ -15,8 +15,11 @@ void destroyTree(node_t * node);
 void insert(node_t * node, int elem);
 void delete(node_t * node, int elem);
 
+node_t* insert_rec(node_t* node, int elem); 
+
 //implementation
 node_t * search(node_t * node, int toFind) {
+	printf("in node %d\n", node->value);
 	if (node == NULL || node->value == toFind) {
 		return node;
 	} if (toFind > node->value) {
@@ -87,39 +90,27 @@ void delete(node_t * node, int elem) {
 }
 
 void insert(node_t * node, int elem) {
-	node_t * current = node;
+	insert_rec(node, elem);
+}
 
-	node_t* new = malloc(sizeof(node_t));
-	new->value = elem;
-
-	while (1) {
-		if (current->value == elem) {
-			return;
-		}
-
-		else if (elem < current->value) {
-			if (current->left == NULL) {
-				current->left = new;
-				new->ptr_to_this = &current->left;
-				return;
-			} else {
-				current = current->left;
-			}
-		} 
-
-		else {
-			if (current->right == NULL) {
-				current->right = new;
-				new->ptr_to_this = &current->right;
-				return;
-			} else {
-				current = current->right;
-			}
-		}
+node_t* insert_rec(node_t* node, int elem) {
+	printf("inserting node %d\n", node->value);
+	if (node == NULL) {
+		node_t* new = (node_t*) malloc(sizeof(node_t));
+		new->value = elem;
+		new->left = NULL;
+		new->right = NULL;
+		return new;
+	} else if (elem < node->value) {
+		node->left = insert_rec(node->left, elem);
+	} else if (elem > node->value) {
+		node->right = insert_rec(node->right, elem);
 	}
+	return node;
 }
 
 node_t * createTree(int firstElem) {
+	printf("creating tree with first elem %d\n", firstElem);
 	node_t * node = (node_t*) malloc(sizeof(node_t));
 	node->value = firstElem;
 	return node;
@@ -228,6 +219,7 @@ bool run_test(bool (*script)(), char name[]) {
 void test_suite() {
 	run_test(&test_insert_create, "test_insert_create()");
 	run_test(&test_destroy_tree, "test_destroy_tree()");
+	printf("about to run test search node exists\n");
 	run_test(&test_search_node_exists, "test_search_node_exists()");
 	run_test(&test_delete_leaf, "test_delete_leaf()");
 	run_test(&test_delete_two_children, "test_delete_two_children()");

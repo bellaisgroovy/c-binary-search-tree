@@ -109,6 +109,7 @@ node_t * createTree(int firstElem) {
 	node->value = firstElem;
 	node->left = NULL;
 	node->right = NULL;
+	node->ptr_to_this = NULL;
 	return node;
 }
 
